@@ -4,6 +4,8 @@
 
 Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
 
-IP 84.201.157.51
-Frontend https://zernina.students.nomoredomains.sbs
-Backend https://api.zernina.students.nomoredomains.sbs
+#IP 84.201.157.51
+
+#Frontend https://zernina.students.nomoredomains.sbs
+
+#Backend https://api.zernina.students.nomoredomains.sbs
