@@ -6,7 +6,7 @@ const { StatusNotFound } = require("./utils/errors/StatusNotFound");
 const { handleError } = require("./utils/handleError");
 const { createUser, login } = require("./controllers/users");
 const auth = require("./middleware/auth");
-const { requestLogger, errorLogger } = require("./middlewares/logger");
+const { requestLogger, errorLogger } = require("./middleware/logger");
 
 // запуск на 3000 порту
 const { PORT = 3000 } = process.env;

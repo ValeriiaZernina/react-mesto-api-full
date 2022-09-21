@@ -1,0 +1,14 @@
+.elements__location {
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-style: normal;
+    color: #000000;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+    margin: 0;
+    max-width: calc(100% - 25px);
+    padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }

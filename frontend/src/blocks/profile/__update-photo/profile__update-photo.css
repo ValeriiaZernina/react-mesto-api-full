@@ -1,0 +1,26 @@
+.profile__update-photo {
+  clip-path: circle(50%);
+  max-width: 120px;
+  max-height: 120px;
+  cursor: pointer;
+}
+
+.profile__update-photo:hover::after {
+    width: 30px;
+    height: 30px;
+    padding: 45px;
+    border-radius: 50%;
+    position: absolute;
+    margin-left: -120px;
+    content: url(../../../images/AvatarUpdate.svg);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  @media screen and (max-width: 699px) {
+    .profile__update-photo {
+      max-width: 169px;
+      max-height: 128px;
+      align-self: center;
+    }
+  }

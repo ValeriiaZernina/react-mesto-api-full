@@ -1,0 +1,16 @@
+.elements {
+  max-width: 882px;
+  margin: 0 auto;
+  padding: 51px 0 0;
+  background-color: #000000;
+}
+@media screen and (max-width: 1023px) {
+  .elements {
+    padding: 33px 19px 24px 19px;
+  }
+}
+@media screen and (max-width: 319px) {
+  .elements {
+    padding: 18px 0px 24px 0px;
+  }
+}

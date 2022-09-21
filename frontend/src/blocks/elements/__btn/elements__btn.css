@@ -1,0 +1,22 @@
+.elements__btn {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 18px;
+    background-color: transparent;
+    background-image: url(../../../images/like.svg);
+    border: none;
+    min-height: 19px;
+    outline: none;
+    padding: 0;
+    transition: .2s;
+    min-width: 22px;
+    position: absolute;
+    right: 20px;
+  }
+  .elements__btn:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
