@@ -74,7 +74,7 @@ class Api {
 }
 
 const api = new Api({
-  url: "https://http://localhost:3000",
+  url: "http://localhost:3001",
   headers: {
     authorization: "4c628538-281e-4966-940f-27dfe004ed12",
     "Content-Type": "application/json",

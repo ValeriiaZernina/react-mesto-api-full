@@ -1,41 +1,96 @@
+import React from "react";
+import { useState, useEffect } from "react";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmationPopup from "./ConfirmationPopup";
-import { useState, useEffect } from "react";
+import Register from "./Register.js";
+import Login from "./Login.js";
+import ProtectedRoute from "./ProtectedRoute.js";
+import InfoTooltip from "./InfoTooltip.js";
 import ImagePopup from "./ImagePopup";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/Api";
+import { auth } from "../utils/Auth";
 
 function App() {
   const [isEditAvatarOpenPopup, setIsEditAvatarOpenPopup] = useState(false);
   const [isEditProfileOpenPopup, setIsEditProfileOpenPopup] = useState(false);
   const [isAddPlaceOpenPopup, setIsAddPlaceOpenPopup] = useState(false);
   const [isDeleteOpenPopup, setIsDeleteOpenPopup] = useState(false);
+  const [isInfoTooltipOpenPopup, setIsInfoTooltipOpenPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({ loggedIn: false });
   const [cards, setCards] = useState([]);
   const [deletedCard, setDeletedCard] = useState({});
+  const [authMessage, setIsAuthMessage] = useState(false);
+  const history = useHistory();
+  const location = useLocation();
+
+  // Проверим токен
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  // Если зареган то направим на главную
+  useEffect(() => {
+    if (currentUser.loggedIn) {
+      history.push("/");
+    }
+  }, [currentUser.loggedIn, history]);
+
+  // проверим токен
+  function checkToken() {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      return;
+    }
+    auth
+      .getUserInfo(jwt)
+      .then((res) => {
+        setCurrentUser((curr) => {
+          return { ...curr, loggedIn: true, email: res.data.email };
+        });
+      })
+      .catch((err) => {
+        console.log(`токен не подходит: ${err} `);
+      });
+  }
 
   useEffect(() => {
-    api
-      .getInitialUser()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => alert(err));
+    if (currentUser.loggedIn) {
+      api
+        .getInitialUser()
+        .then((data) => {
+          setCurrentUser((curr) => {
+            return { ...curr, ...data };
+          });
+        })
+        .catch((err) => alert(err));
+    }
+  }, [currentUser.loggedIn]);
 
-    api
-      .getInitialCards()
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch((err) => alert(err));
-  }, []);
+  useEffect(() => {
+    if (currentUser.loggedIn) {
+      api
+        .getInitialCards()
+        .then((cards) => {
+          setCards(cards);
+        })
+        .catch((err) => alert(err));
+    }
+  }, [currentUser.loggedIn]);
 
   function handleEditAvatarClick() {
     setIsEditAvatarOpenPopup(true);
@@ -55,6 +110,7 @@ function App() {
     setIsAddPlaceOpenPopup(false);
     setSelectedCard({});
     setIsDeleteOpenPopup(false);
+    setIsInfoTooltipOpenPopup(false);
   }
 
   function handleCardClick(card) {
@@ -123,20 +179,81 @@ function App() {
     setDeletedCard(deletedCard);
     setIsDeleteOpenPopup(true);
   }
+  // Вход пользователя и сохранение токена
+  function onLogin({ email, password }) {
+    auth
+      .authorize(email, password)
+      .then((res) => {
+        const { token } = res;
+        if (token) {
+          localStorage.setItem("jwt", token);
+          setCurrentUser((curr) => {
+            return { ...curr, loggedIn: true, email };
+          });
+        }
+      })
+      .catch((err) => alert(err));
+  }
+  // Регистрация пользователя и отк попап с результатом рег-ции
+  function onRegister(data) {
+    auth
+      .register(data.email, data.password)
+      .then(() => {
+        setIsInfoTooltipOpenPopup(true);
+        setIsAuthMessage(true);
+        history.push("/sign-in");
+      })
+      .catch((err) => {
+        setIsAuthMessage(false);
+        setIsInfoTooltipOpenPopup(true);
+        console.log(err);
+      });
+  }
+  // Выход из системы пользователя, на страницу входа
+  function onSignOut() {
+    if (location.pathname === "/") {
+      localStorage.removeItem("jwt");
+      setCurrentUser(
+        (curr) => {
+          return { ...curr, loggedIn: false, email: "" };
+        },
+        [location]
+      );
+    }
+  }
 
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
-        <Main
-          cards={cards}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleDeleteCardPopup}
-        />
+        <Header onSignOut={onSignOut} />
+
+        <Switch>
+          <ProtectedRoute
+            exact
+            path="/"
+            component={Main}
+            cards={cards}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleDeleteCardPopup}
+          ></ProtectedRoute>
+          <Route path="/sign-up">
+            <Register onRegister={onRegister} />
+          </Route>
+          <Route path="/sign-in">
+            <Login onLogin={onLogin} />
+          </Route>
+          <Route>
+            {currentUser.loggedIn ? (
+              <Redirect to="/" />
+            ) : (
+              <Redirect to="/sign-in" />
+            )}
+          </Route>
+        </Switch>
         <Footer />
 
         {/* всплывающее окно редактирования данных профиля */}
@@ -172,6 +289,13 @@ function App() {
         ></ConfirmationPopup>
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+        {/* всплывающее окно результата регистрации*/}
+        <InfoTooltip
+          isOpen={isInfoTooltipOpenPopup}
+          onClose={closeAllPopups}
+          status={authMessage}
+        ></InfoTooltip>
       </CurrentUserContext.Provider>
     </div>
   );

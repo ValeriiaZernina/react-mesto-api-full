@@ -7,11 +7,15 @@ const { handleError } = require("./utils/handleError");
 const { createUser, login } = require("./controllers/users");
 const auth = require("./middleware/auth");
 const { requestLogger, errorLogger } = require("./middleware/logger");
+const cors = require("cors");
 
 // запуск на 3000 порту
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 const app = express();
+
+//Cors
+app.use(cors());
 
 // подключаемся к серверу mongo
 mongoose.connect("mongodb://localhost:27017/mestodb", {
@@ -33,6 +37,7 @@ app.use(cookieParser());
 // обновление, вместо bodyParser
 app.use(express.json());
 // роуты, не требующие авторизации, регистрация и логин
+
 app.post(
   "/signin",
   celebrate({

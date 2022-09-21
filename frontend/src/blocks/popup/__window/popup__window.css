@@ -1,0 +1,11 @@
+.popup__window {
+  display: flex;
+  max-width: 430px;
+  width: 100%;
+  margin: 19px;
+  border-radius: 8px;
+  position: relative;
+  cursor: default;
+  padding-top: 25px;
+  color: #000000;
+}

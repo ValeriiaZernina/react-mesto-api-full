@@ -1,0 +1,14 @@
+.register__question {
+  font-family: "Inter", "Arial", "Helvetica", sans-serif;
+  line-height: 17px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 14px;
+  margin: 15px 4px 0 0;
+}
+@media screen and (max-width: 769px) {
+  .register__text {
+    margin-top: 20px;
+  }
+}
