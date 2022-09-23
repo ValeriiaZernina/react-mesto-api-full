@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
 const { celebrate, Joi, errors } = require("celebrate");
 const { StatusNotFound } = require("./utils/errors/StatusNotFound");
 const { handleError } = require("./utils/handleError");
@@ -15,7 +15,12 @@ const { PORT = 3001 } = process.env;
 const app = express();
 
 //Cors
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 // подключаемся к серверу mongo
 mongoose.connect("mongodb://localhost:27017/mestodb", {
@@ -33,7 +38,8 @@ app.get("/crash-test", () => {
 });
 
 // получение куки
-app.use(cookieParser());
+// app.use(cookieParser());
+
 // обновление, вместо bodyParser
 app.use(express.json());
 // роуты, не требующие авторизации, регистрация и логин

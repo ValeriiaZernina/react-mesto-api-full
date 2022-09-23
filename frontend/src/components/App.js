@@ -60,7 +60,7 @@ function App() {
       .getUserInfo(jwt)
       .then((res) => {
         setCurrentUser((curr) => {
-          return { ...curr, loggedIn: true, email: res.data.email };
+          return { ...curr, loggedIn: true, email: res.email };
         });
       })
       .catch((err) => {
@@ -186,6 +186,7 @@ function App() {
       .then((res) => {
         const { token } = res;
         if (token) {
+          api.setToken(token); // Передает в экземпляр класса Cards новое значение токена.
           localStorage.setItem("jwt", token);
           setCurrentUser((curr) => {
             return { ...curr, loggedIn: true, email };
@@ -213,6 +214,7 @@ function App() {
   function onSignOut() {
     if (location.pathname === "/") {
       localStorage.removeItem("jwt");
+      api.setToken(null);
       setCurrentUser(
         (curr) => {
           return { ...curr, loggedIn: false, email: "" };
