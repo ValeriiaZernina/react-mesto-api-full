@@ -9,7 +9,7 @@ const auth = require('./middleware/auth');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
 // запуск на 3000 порту
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
