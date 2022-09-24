@@ -105,7 +105,7 @@ class Api {
 }
 
 const api = new Api({
-  url: "http://localhost:3001",
+  url: "http://84.201.157.51",
   headers: {
     // authorization: "4c628538-281e-4966-940f-27dfe004ed12",
     authorization: `Bearer ${localStorage.getItem("token")}`,

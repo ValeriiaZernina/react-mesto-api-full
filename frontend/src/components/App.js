@@ -39,9 +39,9 @@ function App() {
   const location = useLocation();
 
   // Проверим токен
-  // useEffect(() => {
-  //   checkToken();
-  // }, []);
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   // Если зареган то направим на главную
   useEffect(() => {
@@ -51,7 +51,7 @@ function App() {
   }, [currentUser.loggedIn, history]);
 
   // проверим токен
-  useEffect(() => {
+  function checkToken() {
     const jwt = localStorage.getItem("jwt");
     if (!jwt) {
       return;
@@ -66,7 +66,7 @@ function App() {
       .catch((err) => {
         console.log(`токен не подходит: ${err} `);
       });
-  });
+  }
 
   useEffect(() => {
     if (currentUser.loggedIn) {
@@ -144,7 +144,7 @@ function App() {
     api
       .patchUser(name, about)
       .then((data) => {
-        setCurrentUser(data);
+        setCurrentUser({ ...data, loggedIn: true });
         closeAllPopups();
       })
       .catch((err) => alert(err))
@@ -156,7 +156,7 @@ function App() {
     api
       .patchAvatar(avatar)
       .then((data) => {
-        setCurrentUser(data);
+        setCurrentUser({ ...data, loggedIn: true });
         closeAllPopups();
       })
       .catch((err) => alert(err))

@@ -48,7 +48,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://84.201.157.51",
 });
 
 export { auth };
