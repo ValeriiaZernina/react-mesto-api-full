@@ -39,9 +39,9 @@ function App() {
   const location = useLocation();
 
   // Проверим токен
-  useEffect(() => {
-    checkToken();
-  }, []);
+  // useEffect(() => {
+  //   checkToken();
+  // }, []);
 
   // Если зареган то направим на главную
   useEffect(() => {
@@ -51,7 +51,7 @@ function App() {
   }, [currentUser.loggedIn, history]);
 
   // проверим токен
-  function checkToken() {
+  useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     if (!jwt) {
       return;
@@ -66,7 +66,7 @@ function App() {
       .catch((err) => {
         console.log(`токен не подходит: ${err} `);
       });
-  }
+  });
 
   useEffect(() => {
     if (currentUser.loggedIn) {
@@ -118,7 +118,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {

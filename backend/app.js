@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-// const cookieParser = require("cookie-parser");
 const { celebrate, Joi, errors } = require("celebrate");
 const { StatusNotFound } = require("./utils/errors/StatusNotFound");
 const { handleError } = require("./utils/handleError");
@@ -36,9 +35,6 @@ app.get("/crash-test", () => {
     throw new Error("Сервер сейчас упадёт");
   }, 0);
 });
-
-// получение куки
-// app.use(cookieParser());
 
 // обновление, вместо bodyParser
 app.use(express.json());
