@@ -16,7 +16,13 @@ const app = express();
 // Cors
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: [
+      'https://api.zernina.students.nomoredomains.sbs',
+      'https://zernina.students.nomoredomains.sbs',
+      'http://zernina.students.nomoredomains.sbs',
+      'http://localhost:3001',
+      'http://localhost:3000',
+    ],
     credentials: true,
   }),
 );
