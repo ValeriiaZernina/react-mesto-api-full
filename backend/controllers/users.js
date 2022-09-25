@@ -1,3 +1,4 @@
+require('dotenv').config();
 const bcrypt = require('bcrypt'); // импортируем bcrypt
 const jwt = require('jsonwebtoken');
 const { StatusNotFound } = require('../utils/errors/StatusNotFound');
