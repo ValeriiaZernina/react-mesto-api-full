@@ -48,7 +48,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseURL: "https://api.zernina.students.nomoredomains.sbs",
+  baseURL: "http://api.zernina.students.nomoredomains.sbs",
 });
 
 export { auth };
